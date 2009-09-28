@@ -1,0 +1,35 @@
+= Thread tools
+
+A collection of utilities that I often use for threaded code.
+
+
+== Classes
+
+* Bounded thread pool
+ require 'thread_tools/threadpool'
+ 
+ tpool = ThreadTools::ThreadPool.new(2)
+ 10.times {|i|
+   tpool.spawn(i) {|ti|
+       puts "#{Thread.current} => #{ti}"
+   }
+ }
+ tpool.shutdown
+
+* Stupid simple semaphore
+ require 'thread_tools/semaphore'
+ 
+ sem = ThreadTools::Semaphore.new(1)
+ sem.acquire
+ sem.release
+
+* Thread pool Mongrel
+ require 'mongrel'
+ require 'thread_tools/mongrel_pool'
+ 
+ server = Mongrel::HttpServer.new(host, port)
+ server.run(10).join
+
+
+== License
+see LICENSE
