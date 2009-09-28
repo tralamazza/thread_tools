@@ -24,6 +24,7 @@ module ThreadTools
                 @cv.wait(@mtx) until @count > 0
                 @count -= 1
             end
+            @count
         end
 
         def release
@@ -31,6 +32,7 @@ module ThreadTools
                 @count += 1
                 @cv.signal
             end
+            @count
         end
     end
 
