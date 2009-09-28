@@ -11,4 +11,4 @@ A collection of utilities that I often use for threaded code.
  
 
 ## License
-see [LICENSE](/LICENSE/)
+see LICENSE
