@@ -15,7 +15,8 @@
 
 
 require 'thread'
-require 'thread_tools/semaphore'
+#require 'thread_tools/semaphore'
+require File.expand_path(File.dirname(__FILE__)+'/semaphore')
 
 
 module ThreadTools
@@ -26,6 +27,7 @@ module ThreadTools
         # number of worker threads
         attr_reader :size
 
+        # _size should be at least 1
         def initialize(_size, _thr_group = nil)
             @on_thr_exception = nil
             @size = 0
@@ -33,17 +35,20 @@ module ThreadTools
             @pool_cv = ConditionVariable.new
             @pool = []
             @thr_grp = _thr_group
+            if _size < 1
+                _size = 1
+            end
             _size.times { create_worker }
         end
 
         def create_worker
             Thread.new do
+                thr = Thread.current
                 @pool_mtx.synchronize do
                     @size += 1
-                end
-                thr = Thread.current
-                if (@thr_grp.nil?)
-                    @thr_grp.add(thr)
+                    if (!@thr_grp.nil?)
+                        @thr_grp.add(thr)
+                    end
                 end
                 thr[:jobs] = []         # XXX array not really necessary
                 thr[:sem] = Semaphore.new(0)
