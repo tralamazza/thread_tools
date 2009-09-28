@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
     s.name = "thread_tools"
-    s.version = "0.2"
+    s.version = "0.21"
     s.date = "2009-09-28"
     s.summary = "Utilities for threaded apps"
     s.platform = Gem::Platform::RUBY
@@ -11,15 +11,15 @@ Gem::Specification.new do |s|
     s.authors = ["Daniel Tralamazza"]
     s.files = [
         "thread_tools.gemspec",
-        "README",
+        "README.rdoc",
         "LICENSE",
-        "lib/threadpool.rb",
-        "lib/mongrel_pool.rb",
-        "lib/semaphore.rb",
+        "lib/thread_tools/threadpool.rb",
+        "lib/thread_tools/mongrel_pool.rb",
+        "lib/thread_tools/semaphore.rb",
         "test/mongrel_test.rb",
         "test/semaphore_test.rb",
         "test/threadpool_test.rb", 
     ]
-    s.rdoc_options = ["--main", "README"]
-    s.extra_rdoc_files = ["README"]
+    s.rdoc_options = ["--main", "README.rdoc"]
+    s.extra_rdoc_files = ["README.rdoc"]
 end
