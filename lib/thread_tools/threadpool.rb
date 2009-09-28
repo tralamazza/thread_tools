@@ -5,7 +5,7 @@
 #
 # Usage:
 #
-# tpool = ThreadPool.new(3)
+# tpool = ThreadTools::ThreadPool.new(3)
 # 12.times do |i|
 #   tpool.spawn(i, "hi") {|ti, ts|
 #     puts "#{Thread.current} (#{ti}) says #{ts}\n"
@@ -15,7 +15,6 @@
 
 
 require 'thread'
-#require 'thread_tools/semaphore'
 require File.expand_path(File.dirname(__FILE__)+'/semaphore')
 
 

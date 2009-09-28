@@ -12,7 +12,7 @@
 # (see mongrel usage)
 
 
-require 'thread_tools/threadpool'
+require File.expand_path(File.dirname(__FILE__)+'/threadpool')
 
 
 module Mongrel
@@ -21,7 +21,7 @@ module Mongrel
         def run(_pool_size = 100)
             trap("TERM") { stop } # trap "kill"
 
-            @thread_pool = ThreadPool.new(_pool_size, @workers)
+            @thread_pool = ThreadTools::ThreadPool.new(_pool_size, @workers)
 
             BasicSocket.do_not_reverse_lookup = true
 
@@ -66,8 +66,8 @@ module Mongrel
                         end
 
                     end
-                    graceful_shutdown
                     @thread_pool.shutdown
+                    graceful_shutdown
                 ensure
                     @socket.close
                     # STDERR.puts "#{Time.now}: Closed socket."

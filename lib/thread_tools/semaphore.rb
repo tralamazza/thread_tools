@@ -10,7 +10,7 @@ require 'thread'
 
 module ThreadTools
 
-    # Poor man's  semaphore
+    # Poor man's semaphore
     class Semaphore
         attr_reader :count
         def initialize(_count)
