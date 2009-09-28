@@ -12,6 +12,7 @@ Gem::Specification.new do |s|
     s.files = [
         "thread_tools.gemspec",
         "README",
+        "LICENSE",
         "lib/threadpool.rb",
         "lib/mongrel_pool.rb",
         "lib/semaphore.rb",
