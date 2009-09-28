@@ -5,11 +5,6 @@
 # for every request. It also traps SIGTERM to close all connections
 # Changed method run to accept an extra parameter to set thread pool size
 #
-# Usage:
-#
-# require 'mongrel'
-# require 'mongrel_pool'
-# (see mongrel usage)
 
 
 require File.expand_path(File.dirname(__FILE__)+'/threadpool')
