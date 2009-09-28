@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
     s.name = "thread_tools"
-    s.version = "0.1"
+    s.version = "0.2"
     s.date = "2009-09-28"
     s.summary = "Utilities for threaded apps"
     s.platform = Gem::Platform::RUBY
