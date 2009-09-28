@@ -1,6 +1,6 @@
 require 'minitest/unit'
-#require '../lib/thread_tools/threadpool'
 require File.expand_path(File.dirname(__FILE__)+'/../lib/thread_tools/threadpool')
+
 
 MiniTest::Unit.autorun
 
