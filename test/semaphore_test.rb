@@ -16,7 +16,7 @@ class SemaphoreTest < Test::Unit::TestCase
         end
         Thread.pass
         sem.release
-        Thread.pass
+        sleep 0.5
         # release should unblock acquire
         assert_equal(ok, true)
         # semaphore count has to be 0
