@@ -3,26 +3,23 @@ require File.expand_path(File.dirname(__FILE__)+'/../lib/thread_tools/semaphore'
 
 
 class SemaphoreTest < Test::Unit::TestCase
-    def setup
-        super
-        @sem = ThreadTools::Semaphore.new(1)
-    end
-
-    def test_acquire
-        assert_equal(@sem.acquire, 0)
-    end
-
-    def test_release
+    def test_acquire_release
+        sem = ThreadTools::Semaphore.new(1)
+        # should be able to acquire
+        assert_equal(sem.acquire, 0)
         ok = false
         Thread.new do
-            @sem.acquire
+            # should block here
+            sem.acquire
+            # and unblock
             ok = true
         end
-        sleep 0.5
-        @sem.release
+        Thread.pass
+        sem.release
+        Thread.pass
         # release should unblock acquire
         assert_equal(ok, true)
-        # semaphore count has to be 1
-        assert_equal(@sem.count, 1)
+        # semaphore count has to be 0
+        assert_equal(sem.count, 0)
     end
 end
