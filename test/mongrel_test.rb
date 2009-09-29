@@ -1,13 +1,10 @@
-require 'minitest/unit'
+require 'test/unit'
 require 'mongrel'
 require File.expand_path(File.dirname(__FILE__)+'/../lib/thread_tools/mongrel_pool')
 require 'net/http'
 
 
-MiniTest::Unit.autorun
-
-
-class MongrelPoolTest < MiniTest::Unit::TestCase
+class MongrelPoolTest < Test::Unit::TestCase
     class MyHandler < Mongrel::HttpHandler
         attr_reader :uniq_threads
         def initialize()
@@ -25,23 +22,24 @@ class MongrelPoolTest < MiniTest::Unit::TestCase
 
     def setup
         super
-        @server = Mongrel::HttpServer.new("0.0.0.0", 8881)
+        @server = Mongrel::HttpServer.new("127.0.0.1", 18881)
         @handler = MyHandler.new
         @server.register("/", @handler)
         @acceptor = @server.run(2)
     end
 
-    def test_receive
-        http = Net::HTTP.new("localhost", 8881)
-        4.times {|i|
+    def test_send_recv_shutdown
+        http = Net::HTTP.new("localhost", 18881)
+        4.times {
             headers, body = http.get("/")
+            # received correct response
             assert_equal(headers.code, "200")
+            assert_equal(body, "test")
         }
+        # number of unique threads
         assert_equal(@handler.uniq_threads.size, 2)
-    end
-
-    def test_shutdown
         @server.stop(true)
+        # all workers are dead
         assert_equal(@server.workers.list.size, 0)
     end
 end

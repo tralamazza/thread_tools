@@ -1,11 +1,8 @@
-require 'minitest/unit'
+require 'test/unit'
 require File.expand_path(File.dirname(__FILE__)+'/../lib/thread_tools/threadpool')
 
 
-MiniTest::Unit.autorun
-
-
-class ThreadPoolTest < MiniTest::Unit::TestCase
+class ThreadPoolTest < Test::Unit::TestCase
     def setup
         super
         @tpool = ThreadTools::ThreadPool.new(2)

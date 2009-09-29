@@ -1,11 +1,8 @@
-require 'minitest/unit'
+require 'test/unit'
 require File.expand_path(File.dirname(__FILE__)+'/../lib/thread_tools/semaphore')
 
 
-MiniTest::Unit.autorun
-
-
-class SemaphoreTest < MiniTest::Unit::TestCase
+class SemaphoreTest < Test::Unit::TestCase
     def setup
         super
         @sem = ThreadTools::Semaphore.new(1)
