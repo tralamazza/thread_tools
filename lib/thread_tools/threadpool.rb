@@ -21,22 +21,20 @@ require File.expand_path(File.dirname(__FILE__)+'/semaphore')
 module ThreadTools
 
     class ThreadPool
-        # thread exception event handler, handler(thread, exception)
-        attr_accessor :on_thr_exception
+        # kill the worker thread if an excpetion is raised (default false)
+        attr_accessor :kill_worker_on_exception
         # number of worker threads
         attr_reader :size
 
         # _size should be at least 1
         def initialize(_size, _thr_group = nil)
-            @on_thr_exception = nil
+            @kill_worker_on_exception = false
             @size = 0
             @pool_mtx = Mutex.new
             @pool_cv = ConditionVariable.new
             @pool = []
             @thr_grp = _thr_group
-            if _size < 1
-                _size = 1
-            end
+            _size = 1 if _size < 1
             _size.times { create_worker }
         end
 
@@ -51,7 +49,7 @@ module ThreadTools
                 end
                 thr[:jobs] = []         # XXX array not really necessary
                 thr[:sem] = Semaphore.new(0)
-                loop {
+                loop do
                     @pool_mtx.synchronize do
                         @pool << thr    # puts this thread in the pool
                         @pool_cv.signal
@@ -63,14 +61,14 @@ module ThreadTools
                     end
                     begin
                         job[:block].call(*job[:args])       # call block
-                    rescue Object => e
-                        if (!@on_thr_exception.nil?)
-                            @on_thr_exception.call(thr, e)  # call event handler
+                    rescue
+                        if (@kill_worker_on_exception)
+                            break       # exit thread on exception
                         end
                     end
-                }
+                end
                 @pool_mtx.synchronize do
-                    @size -= 1  # inc/decrementing a variable should be atomic -_-
+                    @size -= 1
                 end
             end
         end
