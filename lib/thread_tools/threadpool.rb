@@ -34,9 +34,7 @@ module ThreadTools
             @pool_cv = ConditionVariable.new
             @pool = []
             @thr_grp = _thr_group
-            if _size < 1
-                _size = 1
-            end
+            _size = 1 if _size < 1
             _size.times { create_worker }
         end
 
