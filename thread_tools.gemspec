@@ -27,4 +27,5 @@ Gem::Specification.new do |s|
     s.rdoc_options = ['--main', 'README.rdoc']
     s.extra_rdoc_files = ['README.rdoc']
     s.require_paths = ['lib']
+    s.rubyforge_project = 'threadtools'
 end
