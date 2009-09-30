@@ -15,14 +15,15 @@ Gem::Specification.new do |s|
         'lib/thread_tools/threadpool.rb',
         'lib/thread_tools/mongrel_pool.rb',
         'lib/thread_tools/semaphore.rb',
-        'test/mongrel_test.rb',
-        'test/semaphore_test.rb',
-        'test/threadpool_test.rb', 
+        'lib/thread_tools/debugmutex.rb',
+        'test/test_mongrel.rb',
+        'test/test_semaphore.rb',
+        'test/test_threadpool.rb', 
     ]
     s.test_files = [
-        'test/mongrel_test.rb',
-        'test/semaphore_test.rb',
-        'test/threadpool_test.rb', 
+        'test/test_mongrel.rb',
+        'test/test_semaphore.rb',
+        'test/test_threadpool.rb', 
     ]
     s.rdoc_options = ['--main', 'README.rdoc']
     s.extra_rdoc_files = ['README.rdoc']
