@@ -24,4 +24,24 @@ class DebugMutexTest < Test::Unit::TestCase
             mtx.unlock
         end
     end
+
+    def test_contention_owner
+        thr = Thread.current
+        mtx = ThreadTools::DebugMutex.new
+        mtx.synchronize do
+            Thread.new do
+                # previous thread still the owner
+                assert_equal(mtx.owner, thr)
+                mtx.lock
+                # current thread is the new owner
+                assert_equal(mtx.owner, Thread.current)
+                mtx.unlock
+            end
+            sleep 0.05
+        end
+        # we should have 1 contention
+        assert_equal(mtx.contentions, 1)
+        # owner is nil
+        assert_nil(mtx.owner)
+    end
 end
