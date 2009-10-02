@@ -43,8 +43,10 @@ module Mongrel
                                 client.close rescue nil
                                 reap_dead_workers("max processors")
                             else
-                                thread = @thread_pool.spawn(client) {|c| process_client(c) }
-                                thread[:started_on] = Time.now
+                                @thread_pool.spawn(client) do |c|
+                                    Thread.current[:started_on] = Time.now
+                                    process_client(c)
+                                end
                                 sleep @throttle if @throttle > 0
                             end
                         rescue StopServer
