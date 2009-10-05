@@ -27,7 +27,7 @@ class ThreadPoolTest < Test::Unit::TestCase
                 end
             }
         }
-        sleep 0.5
+        sleep 0.1
         # 2 workers - 1 from raised exceptions = 1
         assert_equal(@tpool.size, 1)
         @tpool.shutdown
