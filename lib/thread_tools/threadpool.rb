@@ -25,6 +25,8 @@ module ThreadTools
         attr_accessor :kill_worker_on_exception
         # number of worker threads
         attr_reader :size
+        # if set to true a new worker is created if the pool is empty
+        attr_accessor :create_on_spawn
 
         # _size should be at least 1
         def initialize(_size, _thr_group = nil)
@@ -34,6 +36,7 @@ module ThreadTools
             @pool_cv = ConditionVariable.new
             @pool = []
             @thr_grp = _thr_group
+            @create_on_spawn = false
             _size = 1 if _size < 1
             _size.times { create_worker }
         end
@@ -73,11 +76,11 @@ module ThreadTools
             end
         end
 
-        def spawn(*args, &block, create_new = false)
+        def spawn(*args, &block)
             thr = nil
             @pool_mtx.synchronize do
                 # creates a new worker thread if pool is empty and flag is set
-                if (create_new && @pool.empty?)
+                if (@create_on_spawn && @pool.empty?)
                     create_worker
                 end
                 # wait here until a worker is available
