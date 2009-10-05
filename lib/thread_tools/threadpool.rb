@@ -73,9 +73,13 @@ module ThreadTools
             end
         end
 
-        def spawn(*args, &block)
+        def spawn(*args, &block, create_new = false)
             thr = nil
             @pool_mtx.synchronize do
+                # creates a new worker thread if pool is empty and flag is set
+                if (create_new && @pool.empty?)
+                    create_worker
+                end
                 # wait here until a worker is available
                 @pool_cv.wait(@pool_mtx) until !(thr = @pool.shift).nil?
                 thr[:jobs] << { :args => args, :block => block }
