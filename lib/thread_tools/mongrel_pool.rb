@@ -13,7 +13,7 @@ require File.expand_path(File.dirname(__FILE__)+'/threadpool')
 module Mongrel
     class HttpServer
 
-        def run(_pool_size = 100)
+        def run(_pool_size = 50)
             trap("TERM") { stop } # trap "kill"
 
             @thread_pool = ThreadTools::ThreadPool.new(_pool_size, @workers)
