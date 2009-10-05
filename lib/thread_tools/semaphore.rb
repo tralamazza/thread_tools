@@ -20,19 +20,23 @@ module ThreadTools
         end
 
         def acquire
+            ret = 0
             @mtx.synchronize do
                 @cv.wait(@mtx) until @count > 0
                 @count -= 1
+                ret = @count
             end
-            @count
+            ret
         end
 
         def release
+            ret = 0
             @mtx.synchronize do
                 @count += 1
+                ret = @count
                 @cv.signal
             end
-            @count
+            ret
         end
     end
 
