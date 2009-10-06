@@ -6,7 +6,7 @@
 
 A collection of utilities that I often use for threaded code.
 
-== FEATURES/PROBLEMS:
+== FEATURES:
 
 * Thread pool
 * Mongrel patch (thread pool)
