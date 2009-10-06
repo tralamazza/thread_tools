@@ -44,4 +44,17 @@ class DebugMutexTest < Test::Unit::TestCase
         # owner is nil
         assert_nil(mtx.owner)
     end
+
+    def test_lock_ordering
+        mtxA = ThreadTools::DebugMutex.new
+        mtxB = ThreadTools::DebugMutex.new
+
+        mtxA.lock
+        mtxB.lock
+        assert_raise ThreadTools::EMutexOrder do
+          mtxA.unlock # wrong unlock order
+        end
+        # ensure correct ordering
+        ThreadTools::DebugMutex.unlock_all(Thread.current)
+    end
 end
