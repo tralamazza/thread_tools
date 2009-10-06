@@ -1,9 +1,16 @@
-# Author: Daniel Tralamazza
-# Date: 
+# = Synopsis
+# Stupid simple semaphore
 #
-# Semaphore
+# = Description
+# ...
 #
-
+# = Usage
+#   sem = ThreadTools::Semaphore.new(1)
+#   sem.acquire
+#   sem.release
+#
+# Author:: Daniel Tralamazza
+# License:: {MIT # License.}[http://www.opensource.org/licenses/mit-license.php]
 
 require 'thread'
 

@@ -1,10 +1,21 @@
-# Author: Daniel Tralamazza
-# Date: 28 Sep 2009
+# = Synopsis
+# Quick and dirty patch to mongrel
 #
+# = Description
 # This code patches mongrel to use a thread pool instead of creating a new thread
-# for every request. It also traps SIGTERM to close all connections
-# Changed method run to accept an extra parameter to set thread pool size
+# for every request. It also traps SIGTERM to close all connections.
+# I also changed the run method to accept an extra parameter to set thread pool size.
 #
+# = Usage
+# Just add <tt>require 'thread_tools/mongrel_patch'</tt> after the mongrel require
+#    require 'mongrel'
+#    require 'thread_tools/mongrel_pool'
+#    
+#    server = Mongrel::HttpServer.new(host, port)
+#    server.run(10).join
+#
+# Author:: Daniel Tralamazza
+# License:: {MIT # License.}[http://www.opensource.org/licenses/mit-license.php]
 
 
 require File.expand_path(File.dirname(__FILE__)+'/threadpool')

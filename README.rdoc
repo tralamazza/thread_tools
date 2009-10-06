@@ -40,6 +40,19 @@ A collection of utilities that I often use for threaded code.
  server = Mongrel::HttpServer.new(host, port)
  server.run(10).join
 
+* An annoying mutex
+ require 'thread_tools/debugmutex'
+ mtxA = ThreadTools::DebugMutex.new
+ mtxB = ThreadTools::DebugMutex.new
+ begin
+   mtxA.lock
+   mtxB.lock
+   mtxA.unlock # <= kboom!!!
+ rescue
+   # Warning, the next line unlocks all mutex acquired by this thread
+   ThreadTools::DebugMutex.unlock_all(Thread.current)
+ end
+
 == REQUIREMENTS:
 
 * Mongrel patch requires mongrel (duh)

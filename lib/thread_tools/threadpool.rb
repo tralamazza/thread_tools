@@ -1,17 +1,22 @@
-# Author: Daniel Tralamazza
-# Date: 25 Sep 2009
+# = Synopsis
+# A bounded thread pool
 #
-# ThreadPool
+# = Description
+# This threadpool pre allocates _N_ threads to serve .spawn calls.
+# By default workers are not killed if an exception is thrown, you can
+# change this behavior by setting +kill_worker_on_exception+.
 #
-# Usage:
+# = Usage
+#   tpool = ThreadTools::ThreadPool.new(3)
+#   12.times do |i|</tt>
+#     tpool.spawn(i, "hi") {|ti, ts|
+#       puts "#{Thread.current} (#{ti}) says #{ts}\n"
+#     }
+#   end
+#   tpool.shutdown
 #
-# tpool = ThreadTools::ThreadPool.new(3)
-# 12.times do |i|
-#   tpool.spawn(i, "hi") {|ti, ts|
-#     puts "#{Thread.current} (#{ti}) says #{ts}\n"
-#   }
-# end
-# tpool.shutdown
+# Author:: Daniel Tralamazza
+# License:: {MIT # License.}[http://www.opensource.org/licenses/mit-license.php]
 
 
 require 'thread'
@@ -28,7 +33,7 @@ module ThreadTools
         # if set to true a new worker is created if the pool is empty
         attr_accessor :create_on_spawn
 
-        # _size should be at least 1
+        # *_size* should be at least 1, *_thr_group* (optional) thread group
         def initialize(_size, _thr_group = nil)
             @kill_worker_on_exception = false
             @size = 0
@@ -91,7 +96,7 @@ module ThreadTools
             thr
         end
 
-        def shutdown
+        def shutdown(_sync = true)
             thr = nil
             while !@pool.empty? do
                 @pool_mtx.synchronize do
@@ -100,7 +105,9 @@ module ThreadTools
                 thr[:jobs].clear    # clear any pending job
                 thr[:jobs] << nil   # queue a nil job
                 thr[:sem].release
-                thr.join            # wait here for the thread to die
+                if (_sync)
+                    thr.join        # wait here for the thread to die
+                end
             end
         end
     end

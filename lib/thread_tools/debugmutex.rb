@@ -1,15 +1,29 @@
-# Author: Daniel Tralamazza
-# Date: 29 Sep 2009
+# = Synopsis
+# An annoying mutex for debugging
 #
-# Mutex
-#
+# = Description
 # This class will make things slower, expect more contentions than normal, so
-# don't use to protect small blocks or tight loops
-#
+# <b>do not</b> use it to protect small blocks or tight loops.
 # I derived this mutex because I needed to check contention levels, trace
-# ownership changes and catch simple lock inversions
+# ownership changes and catch simple lock inversions.
 #
-# Use .inspect method to get a small report
+# Tip:: Use .inspect method to get a small report.
+#
+# = Usage
+#    mtxA = ThreadTools::DebugMutex.new
+#    mtxB = ThreadTools::DebugMutex.new
+#    begin
+#      mtxA.lock
+#      mtxB.lock
+#      mtxA.unlock # <= kboom!!!
+#    rescue
+#      ThreadTools::DebugMutex.unlock_all(Thread.current)
+#    end
+#
+#
+# Author::   Daniel Tralamazza
+# License:: {MIT # License.}[http://www.opensource.org/licenses/mit-license.php]
+
 
 require 'thread'
 
@@ -20,8 +34,11 @@ module ThreadTools
     end
 
     class DebugMutex < Mutex
+        # number of out of order unlocks
         attr_reader :out_of_order_locks
+        # number of contentions
         attr_reader :contentions
+        # owner thread, nil if unlocked
         attr_reader :owner
 
         def initialize
@@ -85,7 +102,7 @@ module ThreadTools
             "Owner #{@owner}, Contentions #{@contentions}, Out of order acquisitions #{@out_of_order_locks}"
         end
 
-        # just for fun
+        # *thread* thread object
         def self.unlock_all(thread)
             thread[:locks].reverse_each do |l|
                 l.unlock
