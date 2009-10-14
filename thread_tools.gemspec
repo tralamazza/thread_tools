@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
     s.name = %q{thread_tools}
-    s.version = '0.27'
+    s.version = '0.28'
     s.summary = %q{Utilities for threaded apps}
     s.platform = Gem::Platform::RUBY
     s.email = %q{daniel@tralamazza.com}
