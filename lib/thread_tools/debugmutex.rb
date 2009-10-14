@@ -31,6 +31,11 @@ require 'thread'
 module ThreadTools
 
     class EMutexOrder < Exception
+        attr_reader :mutex
+        def initialize(mutex, str)
+            @mutex = mutex
+            super(str)
+        end
     end
 
     class DebugMutex < Mutex
@@ -80,7 +85,7 @@ module ThreadTools
                 else
                     if @owner[:locks].delete(self)
                         @out_of_order_locks += 1
-                        raise EMutexOrder.new("Expected #{@owner[:locks].last}")
+                        raise EMutexOrder.new(self, "Expected #{@owner[:locks].last}")
                     end
                     # if called again let it pass
                 end
