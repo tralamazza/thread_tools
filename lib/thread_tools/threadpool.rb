@@ -93,8 +93,8 @@ module ThreadTools
         end
 
         def shutdown(_sync = true)
+            thr = nil
             while !@pool.empty? do
-                thr = nil
                 @pool_mtx.synchronize do
                     @pool_cv.wait(@pool_mtx) until !(thr = @pool.shift).nil?
                 end
@@ -104,9 +104,9 @@ module ThreadTools
                 thr.join if _sync   # wait here for the thread to die
             end
             busy_list = @busy_grp.list
-            busy_list.each do |thr|
-                thr.raise('shutdown')   # XXX we could .kill instead
-                thr.join if _sync       # wait here for the thread to die
+            busy_list.each do |athr|
+                athr.raise('shutdown')   # XXX we could .kill instead
+                athr.join if _sync       # wait here for the thread to die
             end
         end
 
